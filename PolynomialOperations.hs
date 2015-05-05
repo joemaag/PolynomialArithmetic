@@ -1,4 +1,4 @@
-module Division where
+module PolynomialOperations where
 import Variable
 import Polynomial
 
