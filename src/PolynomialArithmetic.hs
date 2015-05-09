@@ -1,6 +1,6 @@
 -- | Provides functions that perform an arithmetic operation on two Polynomials.
 
-module PolynomialOperations where
+module PolynomialArithmetic where
 
 import Variable
 import Polynomial

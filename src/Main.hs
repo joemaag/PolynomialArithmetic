@@ -1,7 +1,8 @@
 module Main where
+	
 import Variable 
 import Polynomial
-import PolynomialOperations
+import PolynomialArithmetic
 
 main = do 
 	putStr 
