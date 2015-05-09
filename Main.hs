@@ -18,6 +18,8 @@ main = do
 			] 
 		)
 
+-- Performs all arithmetic operations (add, subtract, multiply, and divide) on all Polynomial pairs in a list.
+-- Results are formated for readability and exported into a string.
 performArithmeticOperationsOnList :: [(Polynomial, Polynomial)] -> String
 performArithmeticOperationsOnList [] = ""
 performArithmeticOperationsOnList ((poly1,poly2):list) = performArithmeticOperations poly1 poly2 ++ performArithmeticOperationsOnList list
@@ -31,6 +33,7 @@ performArithmeticOperations poly1 poly2 = "\nFunctions:\n" ++ (polynomialToStrin
 	++ "\n\n-------------------------------------\n"
 	where quotient = dividePolynomials poly1 poly2
 
+-- Translates a Polynomial to a human readable string.
 polynomialToString :: Polynomial -> String
 polynomialToString Poly {variables = (var:variables)}
 	| (coefficient var) == 0 = polynomialToString Poly {variables  = variables, functionDegree = 0}
@@ -39,6 +42,7 @@ polynomialToString Poly {variables = (var:variables)}
 	| (coefficient var) < 1 = show (coefficient var) ++ "x^" ++ show (degree var) ++ " " ++ polynomialToString Poly {variables  = variables, functionDegree = 0}
 	| otherwise = "+" ++ show (coefficient var) ++ "x^" ++ show (degree var) ++ " " ++ polynomialToString Poly {variables  = variables, functionDegree = 0}
 
+-- Translates a PolynomialRemainder (generated in division) to a human readable string.
 quotientToString :: PolynomialRemainder -> String
 quotientToString PolynomialRatio {
 	numerator = Poly {variables = [], functionDegree = 0}, 

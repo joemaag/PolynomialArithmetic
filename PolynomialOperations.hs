@@ -1,4 +1,7 @@
+-- | Provides functions that perform an arithmetic operation on two Polynomials.
+
 module PolynomialOperations where
+
 import Variable
 import Polynomial
 
@@ -8,7 +11,7 @@ import Polynomial
 --        addPolynomials uses addPolynomialVariables to simplify the process by eliminating the need to constantly construct Polynomial items.
 -- -----------------
 addPolynomials :: Polynomial -> Polynomial -> Polynomial
-addPolynomials poly1 poly2 = Poly { variables = sum, functionDegree = degree (head sum)}
+addPolynomials poly1 poly2 = Poly {variables = sum, functionDegree = degree (head sum)}
 		where sum = addPolynomialVariables (variables poly1) (variables poly2) []
 
 addPolynomialVariables :: [Variable] -> [Variable] -> [Variable] -> [Variable] -- addPolynomialVariables f(x) f(x) new f(x)
@@ -25,7 +28,6 @@ addPolynomialVariables (head1:variables1) (head2:variables2) newVariableList -- 
 	  	addPolynomialVariables variables1 variables2 ((Var {coefficient = (coefficient head1) + (coefficient head2), degree = (degree head1)}):newVariableList)
 
 
-
 -- ------ Subtract ------
 -- Notes: Simply adds the negation of the second polynomial function.
 --        subtractPolynomials uses subtractPolynomialVariables to simplify the process by eliminating the need to constantly construct Polynomial items.
@@ -34,14 +36,18 @@ subtractPolynomials :: Polynomial -> Polynomial -> Polynomial
 subtractPolynomials poly1 poly2  = addPolynomials poly1 (negatePolynomial poly2)
 
 negatePolynomial :: Polynomial -> Polynomial
-negatePolynomial Poly {variables = variables1, functionDegree = functionDegree1}  = Poly {variables = map (\(Var {coefficient = coefficient1, degree = degree1}) -> Var {coefficient = -coefficient1, degree = degree1}) variables1, functionDegree = functionDegree1}
+negatePolynomial Poly {variables = variables1, functionDegree = functionDegree1} = Poly {variables = map 
+	(\(Var {coefficient = coefficient1, degree = degree1}) -> Var {coefficient = -coefficient1, degree = degree1}) 
+	variables1, 
+functionDegree = functionDegree1}
 
 negatePolynomialVariables :: [Variable] -> [Variable]
-negatePolynomialVariables variables  =  map (\(Var {coefficient = coefficient1, degree = degree1}) -> Var {coefficient = -coefficient1, degree = degree1}) variables
+negatePolynomialVariables variables = map 
+	(\(Var {coefficient = coefficient1, degree = degree1}) -> Var {coefficient = -coefficient1, degree = degree1}) 
+	variables
 
 subtractPolynomialVariables :: [Variable] -> [Variable] -> [Variable]
 subtractPolynomialVariables variables1 variables2 = addPolynomialVariables variables1 (negatePolynomialVariables variables2) []
-
 
 
 -- ------ Multiply ------
@@ -58,12 +64,14 @@ multiplyPolynomials poly1 poly2
 multiplyPolynomialVariables :: [Variable] -> [Variable] -> [Variable]
 multiplyPolynomialVariables [] _ = []
 multiplyPolynomialVariables _ [] = []
-multiplyPolynomialVariables (var1:variables1) variables2 =  addPolynomialVariables (map (\var2 -> multiplyTwoVariables var1 var2) variables2) (multiplyPolynomialVariables variables1 variables2) []
+multiplyPolynomialVariables (var1:variables1) variables2 = addPolynomialVariables 
+	(map (\var2 -> multiplyTwoVariables var1 var2) variables2) 
+	(multiplyPolynomialVariables variables1 variables2) 
+	[]
 -- addPolynomialVariables is used instead of a list concatenation "++" so similar terms are combined. May increase time complexity, but increases overall simplicty
 
 multiplyTwoVariables :: Variable -> Variable -> Variable
 multiplyTwoVariables var1 var2 = Var {coefficient = (coefficient var1) * (coefficient var2), degree = (degree var1) + (degree var2)}
-
 
 
 -- ------ Divide ------
@@ -94,15 +102,17 @@ dividePolynomialVariables (dividendHead:dividendTail) (divisorHead:divisorTail) 
 	| otherwise = case aTerm of
 			Var {coefficient = 0, degree = 0} -> (reverse result, PolynomialRatio {
 					numerator = Poly {variables = (dividendHead:dividendTail), functionDegree = degree dividendHead}, 
-					denominator = Poly {variables = (divisorHead:divisorTail), functionDegree = degree divisorHead}}
-					)
+					denominator = Poly {variables = (divisorHead:divisorTail), functionDegree = degree divisorHead}
+					})
 			_ -> dividePolynomialVariables (subtractPolynomialVariables 
-					( dividendHead:dividendTail) 
-					(map (\divisorTerm -> (multiplyTwoVariables aTerm divisorTerm)) (divisorHead:divisorTail))) 
-				(divisorHead:divisorTail)  (aTerm:result)
-	where aTerm = (divideTwoVariables dividendHead divisorHead)
+					(dividendHead:dividendTail) 
+					(map (\divisorTerm -> (multiplyTwoVariables aTerm divisorTerm)) (divisorHead:divisorTail))
+					) 
+				(divisorHead:divisorTail) (aTerm:result)
+	where aTerm = divideTwoVariables dividendHead divisorHead
 
 zeroPolynomialRemainder = PolynomialRatio {numerator = zeroPolynomial, denominator = zeroPolynomial}
+
 zeroPolynomial = Poly {variables = [], functionDegree = 0}
 
 
